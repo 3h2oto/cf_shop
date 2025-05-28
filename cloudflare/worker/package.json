@@ -1,0 +1,22 @@
+{
+  "name": "kamifaka-worker",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "typegen": "wrangler types"
+  },
+  "dependencies": {
+    "itty-router": "^4.0.23",   главных
+    "bcryptjs": "^2.4.3",
+    "@tsndr/cloudflare-worker-jwt": "^2.2.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240502.0", 
+    "typescript": "^5.4.5", 
+    "wrangler": "^3.53.1", 
+    "@types/bcryptjs": "^2.4.6" 
+  }
+}
