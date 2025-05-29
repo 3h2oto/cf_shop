@@ -1,4 +1,4 @@
-name = "kamifaka-worker"
+name = "cf-shop"
 main = "src/index.ts"
 compatibility_date = "2025-05-28" # Date from original wrangler.jsonc
 compatibility_flags = [ "global_fetch_strictly_public" ]
@@ -7,14 +7,17 @@ compatibility_flags = [ "global_fetch_strictly_public" ]
 # directory = "./public" # Original had this, but assets are not part of this subtask yet.
 # For now, focus on API worker. Static assets can be configured later if needed.
 
+[limits]
+cpu_ms = 300_000
+
 [observability]
 enabled = true
 
 # D1 database binding placeholder
 [[d1_databases]]
 binding = "DB" # available in your Worker on env.DB
-database_name = "kamifaka-db"
-database_id = "" # This will be filled in after 'wrangler d1 create kamifaka-db'
+database_name = "shop-db"
+database_id = "" # This will be filled in after 'wrangler d1 create shop-db'
 preview_database_id = "" # For 'wrangler dev --remote' if you use a preview DB
 
 # Example of how to add other bindings or variables if needed in the future:
