@@ -88,20 +88,24 @@ CREATE TABLE ProdInfo (
 );
 
 -- Order table
-CREATE TABLE Orders ( -- "Order" is a keyword in SQL, changed to "Orders"
+CREATE TABLE Orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    prod_id INTEGER NOT NULL,
-    trade_no TEXT NOT NULL UNIQUE,
-    num INTEGER NOT NULL,
-    money REAL NOT NULL, -- Amount in cents
-    status INTEGER DEFAULT 0, -- 0: unpaid, 1: paid, 2: completed, 3: closed
-    create_time INTEGER NOT NULL,
-    update_time INTEGER,
-    pay_id TEXT, -- User ID
-    title TEXT,
-    email TEXT,
-    remark TEXT,
-    coupon_code TEXT,
+    prod_id INTEGER NOT NULL,          -- From existing
+    trade_no TEXT NOT NULL UNIQUE,     -- Existing (maps to out_order_id in API responses)
+    num INTEGER NOT NULL,              -- Existing
+    title TEXT,                        -- Existing (maps to name - product name in API responses)
+    contact TEXT,                      -- Was 'email' in existing, now more generic
+    contact_txt TEXT,                  -- New field for additional contact info
+    unit_price REAL,                   -- New field for unit price at time of order
+    money REAL NOT NULL,               -- Existing (maps to total_price in API responses)
+    payment TEXT,                      -- New field for payment gateway used
+    status INTEGER DEFAULT 0,          -- Existing (0: unpaid, 1: paid, 2: completed, 3: closed)
+    card TEXT,                         -- New field for allocated card details
+    create_time INTEGER NOT NULL,      -- Existing (Unix timestamp)
+    update_time INTEGER,               -- Existing (Unix timestamp)
+    pay_id TEXT,                       -- Existing (User ID from payment system, if any)
+    remark TEXT,                       -- Existing
+    coupon_code TEXT,                  -- Existing
     FOREIGN KEY (prod_id) REFERENCES ProdInfo(id)
 );
 
@@ -111,15 +115,22 @@ CREATE TABLE TempOrder (
     trade_no TEXT NOT NULL UNIQUE,
     prod_id INTEGER NOT NULL,
     num INTEGER NOT NULL,
-    money REAL NOT NULL, -- Amount in cents
+    money REAL NOT NULL, -- Total Amount
     status INTEGER DEFAULT 0, -- 0: unpaid, 1: paid
     create_time INTEGER NOT NULL,
     update_time INTEGER,
     pay_id TEXT, -- User ID
-    title TEXT,
-    email TEXT,
+    title TEXT, -- Product Name
+    email TEXT, -- For contact
     remark TEXT,
     coupon_code TEXT,
+    payment TEXT,      -- Added: Payment method used
+    contact TEXT,      -- Added: Primary contact info (e.g. email/phone)
+    contact_txt TEXT,  -- Added: Additional contact info (e.g. query password)
+    price REAL,        -- Added: Unit price at time of temp order creation
+    total_price REAL,  -- Added: Should be same as money, for consistency with Orders table
+    auto INTEGER,      -- Added: From ProdInfo.auto, boolean (0 or 1)
+    endtime INTEGER,   -- Added: Expiration time for the temp order (Unix timestamp)
     FOREIGN KEY (prod_id) REFERENCES ProdInfo(id)
 );
 
