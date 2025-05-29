@@ -9,7 +9,9 @@ import adminNoticeRoutes from './adminNoticeRoutes';
 import adminAccountRoutes from './adminAccountRoutes';
 import adminConfigRoutes from './adminConfigRoutes';
 import adminPluginRoutes from './adminPluginRoutes';
-import adminDashboardRoutes from './adminDashboardRoutes'; // Import dashboard routes
+import adminDashboardRoutes from './adminDashboardRoutes';
+import userRoutes from './userRoutes';
+import webhookRoutes from './webhookRoutes'; // Import webhook routes
 
 // Define the Env interface according to Cloudflare Workers specifics
 // This will include bindings like D1, R2, KV, Services, etc.
@@ -155,7 +157,8 @@ mainRouter.all('*', (request: IRequest, env: Env, ctx: ExecutionContext) => {
 });
 
 mainRouter.all('/api/v4/*', router.handle);       // Admin routes
-mainRouter.all('/api/v2/*', userRouter.handle); // User routes
+mainRouter.all('/api/v2/*', userRoutes.handle);   // User routes
+mainRouter.all('/notify/*', webhookRoutes.handle); // Webhook routes
 mainRouter.get('/', () => new Response('Kamifaka Worker is running!')); // Root path
 mainRouter.all('*', () => error(404, 'Not found. Please check the URL.')); // Catch-all 404
 
